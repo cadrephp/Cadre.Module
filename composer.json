@@ -1,0 +1,31 @@
+{
+    "name": "cadre/module",
+    "description": "Module system based on Aura.Di",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "aura/di": "~3.0"
+    },
+    "require-dev": {
+        "phing/phing": "^2.15",
+        "phpunit/phpunit": "^5.0",
+        "squizlabs/php_codesniffer": "^2.6.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cadre\\Module\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Cadre\\Module\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Andrew Shell",
+            "email": "andrew@andrewshell.org"
+        }
+    ],
+    "minimum-stability": "stable"
+}
