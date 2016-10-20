@@ -5,6 +5,8 @@ This is a lightweight module system based on [Aura.Di](https://github.com/auraph
 This library defines several classes that implement `Aura\Di\ContainerConfigInterface` so
 it can be used in any project that uses Aura.Di.
 
+This is in early development so please provide feedback via [Issues](https://github.com/cadrephp/Cadre.Module/issues.).
+
 ## Example
 
 ```php
