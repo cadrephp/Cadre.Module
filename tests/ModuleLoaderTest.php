@@ -190,4 +190,11 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
 
         $value = $di->newInstance(Value::class);
     }
+
+    public function testModuleIsDev()
+    {
+        $loader = new ModuleLoader([], $isDev = true);
+
+        $this->assertTrue($loader->isDev());
+    }
 }

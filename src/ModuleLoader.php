@@ -17,7 +17,7 @@ class ModuleLoader implements ModuleLoaderInterface
     public function __construct(array $modules, $isDev = false)
     {
         $this->modules = $modules;
-        $this->isDev = $isDev;
+        $this->isDev = boolval($isDev);
     }
 
     public function define(Container $di)
@@ -38,6 +38,11 @@ class ModuleLoader implements ModuleLoaderInterface
                 $containerConfig->modify($di);
             }
         }
+    }
+
+    public function isDev()
+    {
+        return $this->isDev;
     }
 
     public function loaded($name)
