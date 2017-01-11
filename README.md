@@ -1,17 +1,40 @@
 # Cadre.Module
 
-This is a lightweight module system based on [Aura.Di](https://github.com/auraphp/Aura.Di).
+This is a lightweight module system based on [Aura.Di][].
 
-This library defines several classes that implement `Aura\Di\ContainerConfigInterface` so
-it can be used in any project that uses Aura.Di.
+This library defines several classes that implement 
+`Aura\Di\ContainerConfigInterface` so it can be used in any project that uses 
+Aura.Di.
 
-This is in early development so please provide feedback via [Issues](https://github.com/cadrephp/Cadre.Module/issues.).
+This is in early development so please provide feedback via 
+[Issues](https://github.com/cadrephp/Cadre.Module/issues.).
+
+## Installation and Autoloading
+
+This package is installable and PSR-4 autoloadable via Composer as
+[cadre/module][].
+
+Alternatively, [download a release][], or clone this repository, then map the
+`Cadre\Module\` namespace to the package `src/` directory.
+
+## Dependencies
+
+This package requires PHP 7.0 or later; it has been tested on PHP 7.0 and 
+PHP 7.1. We recommend using the latest available version of PHP as a matter of
+principle.
 
 ## Quality
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/badges/quality-score.png?b=0.x)](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/?branch=0.x)
 [![Code Coverage](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/badges/coverage.png?b=0.x)](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/?branch=0.x)
 [![Build Status](https://travis-ci.org/cadrephp/Cadre.Module.svg?branch=0.x)](https://travis-ci.org/cadrephp/Cadre.Module)
+
+To run the unit tests at the command line, issue `composer install` and then
+`vendor/bin/phpunit` at the package root. This requires [Composer][] to be 
+available as `composer`, and [PHPUnit][] to be available as `vendor/bin/phpunit`.
+
+This package attempts to comply with [PSR-1][], [PSR-2][], and [PSR-4][]. If
+you notice compliance oversights, please send a patch via pull request.
 
 ## Example
 
@@ -124,3 +147,12 @@ Passes through to the `define` method on all loaded modules.
 ### modify(Container $di)
 
 Passes through to the `modify` method on all loaded modules.
+
+[Aura.Di]: https://github.com/auraphp/Aura.Di
+[PSR-1]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md
+[PSR-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md
+[PSR-4]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md
+[Composer]: http://getcomposer.org/
+[PHPUnit]: http://phpunit.de/
+[download a release]: https://github.com/cadrephp/Cadre.Module/releases
+[cadre/module]: https://packagist.org/packages/cadre/module
