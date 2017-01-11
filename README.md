@@ -7,6 +7,12 @@ it can be used in any project that uses Aura.Di.
 
 This is in early development so please provide feedback via [Issues](https://github.com/cadrephp/Cadre.Module/issues.).
 
+## Quality
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/?branch=master)
+[![Build Status](https://travis-ci.org/cadrephp/Cadre.Module.svg?branch=master)](https://travis-ci.org/cadrephp/Cadre.Module)
+
 ## Example
 
 ```php
