@@ -9,9 +9,9 @@ This is in early development so please provide feedback via [Issues](https://git
 
 ## Quality
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/?branch=master)
-[![Build Status](https://travis-ci.org/cadrephp/Cadre.Module.svg?branch=master)](https://travis-ci.org/cadrephp/Cadre.Module)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/badges/quality-score.png?b=0.x)](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/?branch=0.x)
+[![Code Coverage](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/badges/coverage.png?b=0.x)](https://scrutinizer-ci.com/g/cadrephp/Cadre.Module/?branch=0.x)
+[![Build Status](https://travis-ci.org/cadrephp/Cadre.Module.svg?branch=0.x)](https://travis-ci.org/cadrephp/Cadre.Module)
 
 ## Example
 
