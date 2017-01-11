@@ -23,7 +23,7 @@ class ModuleLoader implements ModuleLoaderInterface
     public function define(Container $di)
     {
         $this->resolveDependencies();
-        foreach ($this->containerConfigs as $name => $containerConfig) {
+        foreach ($this->containerConfigs as $containerConfig) {
             if ($containerConfig instanceof ContainerConfigInterface) {
                 $containerConfig->define($di);
             }
@@ -33,7 +33,7 @@ class ModuleLoader implements ModuleLoaderInterface
     public function modify(Container $di)
     {
         $this->resolveDependencies();
-        foreach ($this->containerConfigs as $name => $containerConfig) {
+        foreach ($this->containerConfigs as $containerConfig) {
             if ($containerConfig instanceof ContainerConfigInterface) {
                 $containerConfig->modify($di);
             }
@@ -77,8 +77,8 @@ class ModuleLoader implements ModuleLoaderInterface
 
             $this->containerConfigs[$name] = $module;
 
-            $this->resolveRequire($modules, $module, $name);
-            $this->resolveRequireDev($modules, $module, $name);
+            $this->resolveRequire($modules, $module);
+            $this->resolveRequireDev($modules, $module);
             $this->resolveConflict($module, $name);
             $this->resolveReplace($module, $name);
         }
@@ -86,7 +86,7 @@ class ModuleLoader implements ModuleLoaderInterface
         $this->isResolved = true;
     }
 
-    protected function resolveRequire($modules, $module, $name)
+    protected function resolveRequire($modules, $module)
     {
         $requiredModules = $module->require();
         foreach ($requiredModules as $requiredModule) {
@@ -94,7 +94,7 @@ class ModuleLoader implements ModuleLoaderInterface
         }
     }
 
-    protected function resolveRequireDev($modules, $module, $name)
+    protected function resolveRequireDev($modules, $module)
     {
         if ($this->isDev) {
             $requiredModules = $module->requireDev();

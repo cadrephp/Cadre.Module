@@ -36,6 +36,12 @@
         </exec>
     </target>
 
+    <target name="phpmd" description="Find potential messes with PHP Mess Detector">
+        <phpmd file="src" rulesets="cleancode,codesize,unusedcode">
+            <formatter type="html" outfile="build/phpmd.html" />
+        </phpmd>
+    </target>
+
     <target name="phpunit" description="Run all tests with PHPUnit">
         <exec executable="vendor/bin/phpunit" passthru="true" checkreturn="true" />
     </target>
