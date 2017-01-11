@@ -4,7 +4,8 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "aura/di": "~3.0"
+        "php": "^7.0",
+        "aura/di": "^3.0"
     },
     "require-dev": {
         "phing/phing": "^2.15",
