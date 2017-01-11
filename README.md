@@ -7,7 +7,7 @@ This library defines several classes that implement
 Aura.Di.
 
 This is in early development so please provide feedback via 
-[Issues](https://github.com/cadrephp/Cadre.Module/issues.).
+[Issues](https://github.com/cadrephp/Cadre.Module/issues).
 
 ## Installation and Autoloading
 
