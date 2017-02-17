@@ -10,6 +10,7 @@ use Cadre\Module\Sample\ReplaceAgainModule;
 use Cadre\Module\Sample\RequireModule;
 use Cadre\Module\Sample\RequiredModule;
 use Cadre\Module\Sample\RequireDevModule;
+use Cadre\Module\Sample\RequireEnvModule;
 use Cadre\Module\Sample\Value;
 use InvalidArgumentException;
 
@@ -19,7 +20,7 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $loader = new ModuleLoader([
             RequireModule::class,
-        ], $isDev = false);
+        ]);
 
         $builder = new ContainerBuilder();
         $di = $builder->newConfiguredInstance([$loader]);
@@ -33,7 +34,7 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $loader = new ModuleLoader([
             RequireDevModule::class,
-        ], $isDev = true);
+        ], 'dev');
 
         $builder = new ContainerBuilder();
         $di = $builder->newConfiguredInstance([$loader]);
@@ -47,7 +48,7 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $loader = new ModuleLoader([
             RequireDevModule::class,
-        ], $isDev = false);
+        ]);
 
         $builder = new ContainerBuilder();
         $di = $builder->newConfiguredInstance([$loader]);
@@ -62,7 +63,7 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new ModuleLoader([
             RequireModule::class,
             RequireModule::class,
-        ], $isDev = false);
+        ]);
 
         $builder = new ContainerBuilder();
         $di = $builder->newConfiguredInstance([$loader]);
@@ -77,7 +78,7 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new ModuleLoader([
             ReplaceModule::class,
             RequireModule::class,
-        ], $isDev = false);
+        ]);
 
         $builder = new ContainerBuilder();
         $di = $builder->newConfiguredInstance([$loader]);
@@ -95,7 +96,7 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
             ReplaceModule::class,
             ReplaceAgainModule::class,
             RequireModule::class,
-        ], $isDev = false);
+        ]);
 
         $builder = new ContainerBuilder();
         $di = $builder->newConfiguredInstance([$loader]);
@@ -110,7 +111,7 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new ModuleLoader([
             RequiredModule::class,
             ReplaceModule::class,
-        ], $isDev = false);
+        ]);
 
         $builder = new ContainerBuilder();
         $di = $builder->newConfiguredInstance([$loader]);
@@ -125,7 +126,7 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new ModuleLoader([
             RequiredModule::class,
             ConflictModule::class,
-        ], $isDev = false);
+        ]);
 
         $builder = new ContainerBuilder();
         $di = $builder->newConfiguredInstance([$loader]);
@@ -140,7 +141,7 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new ModuleLoader([
             ConflictModule::class,
             RequiredModule::class,
-        ], $isDev = false);
+        ]);
 
         $builder = new ContainerBuilder();
         $di = $builder->newConfiguredInstance([$loader]);
@@ -153,7 +154,7 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new ModuleLoader([
             ConflictModule::class,
             LoadedModule::class,
-        ], $isDev = false);
+        ]);
 
         $builder = new ContainerBuilder();
         $di = $builder->newConfiguredInstance([$loader]);
@@ -167,7 +168,7 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $loader = new ModuleLoader([
             LoadedModule::class,
-        ], $isDev = false);
+        ]);
 
         $builder = new ContainerBuilder();
         $di = $builder->newConfiguredInstance([$loader]);
@@ -183,7 +184,7 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
 
         $loader = new ModuleLoader([
             NotAModule::class,
-        ], $isDev = false);
+        ]);
 
         $builder = new ContainerBuilder();
         $di = $builder->newConfiguredInstance([$loader]);
@@ -191,10 +192,17 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
         $value = $di->newInstance(Value::class);
     }
 
-    public function testModuleIsDev()
+    public function testModuleRequireEnv()
     {
-        $loader = new ModuleLoader([], $isDev = true);
+        $loader = new ModuleLoader([
+            RequireEnvModule::class,
+        ], 'special_environment');
 
-        $this->assertTrue($loader->isDev());
+        $builder = new ContainerBuilder();
+        $di = $builder->newConfiguredInstance([$loader]);
+
+        $value = $di->newInstance(Value::class);
+
+        $this->assertEquals('required', $value->value);
     }
 }

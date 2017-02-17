@@ -8,16 +8,16 @@ use Aura\Di\ContainerConfigInterface;
 class ModuleLoader implements ModuleLoaderInterface
 {
     protected $modules = [];
-    protected $isDev;
+    protected $environment;
     protected $isResolved = false;
     protected $containerConfigs = [];
     protected $conflictsWith = [];
     protected $replacedWith = [];
 
-    public function __construct(array $modules, $isDev = false)
+    public function __construct(array $modules, $environment = '')
     {
         $this->modules = $modules;
-        $this->isDev = boolval($isDev);
+        $this->environment = $environment;
     }
 
     public function define(Container $di)
@@ -38,11 +38,6 @@ class ModuleLoader implements ModuleLoaderInterface
                 $containerConfig->modify($di);
             }
         }
-    }
-
-    public function isDev()
-    {
-        return $this->isDev;
     }
 
     public function loaded($name)
@@ -78,7 +73,7 @@ class ModuleLoader implements ModuleLoaderInterface
             $this->containerConfigs[$name] = $module;
 
             $this->resolveRequire($modules, $module);
-            $this->resolveRequireDev($modules, $module);
+            $this->resolveRequireEnv($modules, $module);
             $this->resolveConflict($module, $name);
             $this->resolveReplace($module, $name);
         }
@@ -94,10 +89,13 @@ class ModuleLoader implements ModuleLoaderInterface
         }
     }
 
-    protected function resolveRequireDev($modules, $module)
+    protected function resolveRequireEnv($modules, $module)
     {
-        if ($this->isDev) {
-            $requiredModules = $module->requireDev();
+        $envMethod = 'require' . str_replace(' ', '', ucwords(
+            strtolower(str_replace('_', ' ', trim($this->environment)))
+        ));
+        if ('require' !== $envMethod && method_exists($module, $envMethod)) {
+            $requiredModules = $module->$envMethod();
             foreach ($requiredModules as $requiredModule) {
                 $modules->append($requiredModule);
             }

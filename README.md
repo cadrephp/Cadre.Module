@@ -42,7 +42,7 @@ you notice compliance oversights, please send a patch via pull request.
 $loader = new ModuleLoader([
     FirstModule::class,
     SecondModule::class,
-], $isDev = true);
+], 'development');
 
 $builder = new ContainerBuilder();
 $di = $builder->newConfiguredInstance([$loader]);
@@ -70,15 +70,11 @@ class FirstModule extends Module
 
 ## Cadre\Module\ModuleInterface
 
-This interface extends `Aura\Di\ContainerConfigInterface` and defines four new methods.
+This interface extends `Aura\Di\ContainerConfigInterface` and defines four methods.
 
 ### require()
 
 Returns an array of class names of other modules that it requires.
-
-### requireDev()
-
-Returns an array of class names of other modules that it requires if in development.
 
 ### conflict()
 
@@ -114,7 +110,7 @@ public function define(Container $di)
 
 ## Cadre\Module\ModuleLoaderInterface
 
-This interface extends `Aura\Di\ContainerConfigInterface` and defines one new method.
+This interface extends `Aura\Di\ContainerConfigInterface` and defines one method.
 
 ### loaded($name)
 
@@ -125,16 +121,25 @@ Returns true or false if the module specified by `$name` has been loaded.
 This class does all the work. It contains default implementations of all
 methods from `Cadre\Module\ModuleInterface`.
 
-### __construct(array $modules, bool $isDev = false)
+### __construct(array $modules, string $environment = '')
 
 When you create a new `ModuleLoader` you pass into it the modules you want to load.
+
+You may also specify the environment you're running. When you specify a environment
+we will check for a method requiring modules when in that environment. For example
+if your environment is "dev" we will look for a method `requireDev`. 
+
+To generate the method name we convert a snake cased (ex: special_environment) 
+environment into a camel cased method name prefixed with "require"
+(ex: requireSpecialEnvironment).
 
 ### protected resolveDependencies()
 
 This method is called from `loaded`, `define` and `modify`.
 
 It starts with the list of modules from the constructor and goes through them loading
-the modules and then adding require and optionally requireDev modules to the list to load.
+the modules and then adding require and optionally require{Environment} modules to the
+list to load.
 
 Throws `Cadre\Module\ConflictingModuleException` if conflicting module is loaded.
 Throws `Cadre\Module\AlreadyReplacedException` if replaced module has already been replaced.

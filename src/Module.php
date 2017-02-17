@@ -22,11 +22,6 @@ class Module implements ModuleInterface
         return [];
     }
 
-    public function requireDev()
-    {
-        return [];
-    }
-
     public function conflict()
     {
         return [];
