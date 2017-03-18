@@ -14,7 +14,7 @@ use Cadre\Module\Sample\RequireEnvModule;
 use Cadre\Module\Sample\Value;
 use InvalidArgumentException;
 
-class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
+class ModuleLoaderTest extends \PHPUnit\Framework\TestCase
 {
     public function testModuleRequire()
     {
