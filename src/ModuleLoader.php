@@ -46,6 +46,11 @@ class ModuleLoader implements ModuleLoaderInterface
         return isset($this->containerConfigs[$name]);
     }
 
+    public function isEnv($environment)
+    {
+        return 0 === strcmp($environment, $this->environment);
+    }
+
     protected function resolveDependencies()
     {
         if ($this->isResolved) {
