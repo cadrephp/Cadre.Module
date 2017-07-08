@@ -42,7 +42,7 @@ you notice compliance oversights, please send a patch via pull request.
 $loader = new ModuleLoader([
     FirstModule::class,
     SecondModule::class,
-], 'development');
+], 'development', 'web');
 
 $builder = new ContainerBuilder();
 $di = $builder->newConfiguredInstance([$loader]);
@@ -58,7 +58,12 @@ class FirstModule extends Module
 {
     public function require()
     {
-        return [ThirdModule::class];
+        if ($this->loader()->isContext('web')) {
+            // Only require ThirdModule in the web context
+            return [ThirdModule::class];
+        } else {
+            return [];
+        }
     }
 
     public function define(Container $di)
@@ -110,18 +115,26 @@ public function define(Container $di)
 
 ## Cadre\Module\ModuleLoaderInterface
 
-This interface extends `Aura\Di\ContainerConfigInterface` and defines one method.
+This interface extends `Aura\Di\ContainerConfigInterface` and defines three methods.
 
 ### loaded($name)
 
 Returns true or false if the module specified by `$name` has been loaded.
+
+### isEnv($environment)
+
+Returns true or false if the ModuleLoader was instanciated with the specified environment.
+
+### isContext($context)
+
+Returns true or false if the ModuleLoader was instanciated with the specified context.
 
 ## Cadre\Module\ModuleLoader
 
 This class does all the work. It contains default implementations of all
 methods from `Cadre\Module\ModuleInterface`.
 
-### __construct(array $modules, string $environment = '')
+### __construct(array $modules, string $environment = '', string $context = '')
 
 When you create a new `ModuleLoader` you pass into it the modules you want to load.
 
@@ -132,6 +145,11 @@ if your environment is "dev" we will look for a method `requireDev`.
 To generate the method name we convert a snake cased (ex: special_environment) 
 environment into a camel cased method name prefixed with "require"
 (ex: requireSpecialEnvironment).
+
+You may also specify the context you're running. By default we do nothing with the
+context. However, you can query it via `isContext` method on the loader from inside
+a module. For example if your context is "web" you could query against it like 
+`if ($this->loader()->isContext('web')) { }` and configure things differently.
 
 ### protected resolveDependencies()
 

@@ -7,4 +7,5 @@ interface ModuleLoaderInterface extends ContainerConfigInterface
 {
     public function loaded($name);
     public function isEnv($environment);
+    public function isContext($context);
 }

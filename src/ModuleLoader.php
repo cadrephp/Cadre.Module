@@ -9,15 +9,17 @@ class ModuleLoader implements ModuleLoaderInterface
 {
     protected $modules = [];
     protected $environment;
+    protected $context;
     protected $isResolved = false;
     protected $containerConfigs = [];
     protected $conflictsWith = [];
     protected $replacedWith = [];
 
-    public function __construct(array $modules, $environment = '')
+    public function __construct(array $modules, $environment = '', $context = '')
     {
         $this->modules = $modules;
         $this->environment = $environment;
+        $this->context = $context;
     }
 
     public function define(Container $di)
@@ -49,6 +51,11 @@ class ModuleLoader implements ModuleLoaderInterface
     public function isEnv($environment)
     {
         return 0 === strcmp($environment, $this->environment);
+    }
+
+    public function isContext($context)
+    {
+        return 0 === strcmp($context, $this->context);
     }
 
     protected function resolveDependencies()

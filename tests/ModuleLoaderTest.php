@@ -54,6 +54,16 @@ class ModuleLoaderTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($loader->isEnv('prod'));
     }
 
+    public function testIsContext()
+    {
+        $loader = new ModuleLoader([
+            RequireDevModule::class,
+        ], 'dev', 'test');
+
+        $this->assertTrue($loader->isContext('test'));
+        $this->assertFalse($loader->isContext('web'));
+    }
+
     public function testModuleRequireDevWhenNotDev()
     {
         $loader = new ModuleLoader([

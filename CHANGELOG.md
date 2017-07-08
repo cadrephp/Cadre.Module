@@ -4,7 +4,16 @@ All notable changes to this package will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
-## [0.4.1]
+## 0.5.1 - 2017-07-03
+### Added
+-  `$context = ''` to ModuleLoader constructor
+-  `isContext` method to ModuleLoader
+
+## 0.5.0 - 2017-07-03
+### Added
+-  `isEnv` method to ModuleLoader
+
+## 0.4.1 - 2017-03-17
 ### Changed
 - Updating dev dependencies
 
