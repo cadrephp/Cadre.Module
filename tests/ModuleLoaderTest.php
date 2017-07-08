@@ -2,6 +2,8 @@
 namespace Cadre\Module;
 
 use Aura\Di\ContainerBuilder;
+use Cadre\Module\Sample\CircularModuleA;
+use Cadre\Module\Sample\CircularModuleB;
 use Cadre\Module\Sample\ConflictModule;
 use Cadre\Module\Sample\LoadedModule;
 use Cadre\Module\Sample\NotAModule;
@@ -42,6 +44,34 @@ class ModuleLoaderTest extends \PHPUnit\Framework\TestCase
         $value = $di->newInstance(Value::class);
 
         $this->assertEquals('required', $value->value);
+    }
+
+    public function testHoistingRequiredModules()
+    {
+        $loader = new ModuleLoader([
+            RequireModule::class,
+            RequiredModule::class,
+        ], 'dev');
+
+        $builder = new ContainerBuilder();
+        $di = $builder->newConfiguredInstance([$loader]);
+
+        $value = $di->newInstance(Value::class);
+
+        $this->assertEquals('required', $value->value);
+    }
+
+    public function testFailOnCircularReferences()
+    {
+        $this->expectException(CircularReferenceException::class);
+
+        $loader = new ModuleLoader([
+            CircularModuleA::class,
+            CircularModuleB::class,
+        ], 'dev');
+
+        $builder = new ContainerBuilder();
+        $di = $builder->newConfiguredInstance([$loader]);
     }
 
     public function testIsEnv()

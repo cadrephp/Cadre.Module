@@ -1,8 +1,9 @@
 <?php
 namespace Cadre\Module\Sample;
 
-use Cadre\Module\Module;
 use Aura\Di\Container;
+use Cadre\Module\Module;
+use Exception;
 
 class RequireDevModule extends Module
 {

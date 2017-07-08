@@ -1,7 +1,6 @@
 <?php
 namespace Cadre\Module;
 
-use ArrayIterator;
 use Aura\Di\Container;
 use Aura\Di\ContainerConfigInterface;
 
@@ -14,6 +13,7 @@ class ModuleLoader implements ModuleLoaderInterface
     protected $containerConfigs = [];
     protected $conflictsWith = [];
     protected $replacedWith = [];
+    protected $touchedModules = [];
 
     public function __construct(array $modules, $environment = '', $context = '')
     {
@@ -64,17 +64,19 @@ class ModuleLoader implements ModuleLoaderInterface
             return;
         }
 
-        $modules = new ArrayIterator($this->modules);
+        $idx = 0;
 
-        foreach ($modules as $module) {
-            $module = $this->getModule($module);
+        while ($idx < count($this->modules)) {
+            $module = $this->getModule($this->modules[$idx]);
             $name = get_class($module);
 
             if (isset($this->containerConfigs[$name])) {
+                $idx++;
                 continue;
             }
 
             if (isset($this->replacedWith[$name])) {
+                $idx++;
                 continue;
             }
 
@@ -82,35 +84,65 @@ class ModuleLoader implements ModuleLoaderInterface
                 throw new ConflictingModuleException($name, $this->conflictsWith[$name]);
             }
 
-            $this->containerConfigs[$name] = $module;
+            if (empty($this->touchedModules[$name])) {
+                $this->touchedModules[$name] = 0;
+            }
 
-            $this->resolveRequire($modules, $module);
-            $this->resolveRequireEnv($modules, $module);
+            if (1 < $this->touchedModules[$name]) {
+                throw new CircularReferenceException($name, $this->touchedModules[$name]);
+            }
+
+            $this->touchedModules[$name]++;
+
+            $this->resolveRequire($idx, $module);
+            $this->resolveRequireEnv($idx, $module);
             $this->resolveConflict($module, $name);
             $this->resolveReplace($module, $name);
+
+            $module = $this->getModule($this->modules[$idx]);
+            if (0 === strcmp($name, get_class($module))) {
+                // No new modules were inserted
+                $this->containerConfigs[$name] = $module;
+            } else {
+                // Do not increment $idx, reprocess this $idx
+                continue;
+            }
+
+            $idx++;
         }
 
         $this->isResolved = true;
     }
 
-    protected function resolveRequire($modules, $module)
+    protected function injectRequiredModule($idx, $requiredModules)
     {
-        $requiredModules = $module->require();
         foreach ($requiredModules as $requiredModule) {
-            $modules->append($requiredModule);
+            $foundIdx = array_search($requiredModule, $this->modules);
+            if (false === $foundIdx) {
+                // New module, not found yet
+                array_splice($this->modules, $idx, 0, $requiredModule);
+            } elseif ($idx < $foundIdx) {
+                // Found module after us in list. Move up
+                array_splice($this->modules, $foundIdx, 1);
+                array_splice($this->modules, $idx, 0, $requiredModule);
+            }
         }
     }
 
-    protected function resolveRequireEnv($modules, $module)
+    protected function resolveRequire($idx, $module)
+    {
+        $requiredModules = $module->require();
+        $this->injectRequiredModule($idx, $requiredModules);
+    }
+
+    protected function resolveRequireEnv($idx, $module)
     {
         $envMethod = 'require' . str_replace(' ', '', ucwords(
             strtolower(str_replace('_', ' ', trim($this->environment)))
         ));
         if ('require' !== $envMethod && method_exists($module, $envMethod)) {
             $requiredModules = $module->$envMethod();
-            foreach ($requiredModules as $requiredModule) {
-                $modules->append($requiredModule);
-            }
+            $this->injectRequiredModule($idx, $requiredModules);
         }
     }
 

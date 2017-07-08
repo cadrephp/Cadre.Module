@@ -12,4 +12,11 @@ class RequireModule extends Module
             RequiredModule::class,
         ];
     }
+
+    public function define(Container $di)
+    {
+        if (empty($di->params[Value::class]['value'])) {
+            throw new Exception('Expected RequiredModule Already');
+        }
+    }
 }
