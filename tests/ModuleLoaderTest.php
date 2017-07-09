@@ -4,6 +4,7 @@ namespace Cadre\Module;
 use Aura\Di\ContainerBuilder;
 use Cadre\Module\Sample\CircularModuleA;
 use Cadre\Module\Sample\CircularModuleB;
+use Cadre\Module\Sample\Config;
 use Cadre\Module\Sample\ConflictModule;
 use Cadre\Module\Sample\LoadedModule;
 use Cadre\Module\Sample\NotAModule;
@@ -18,6 +19,20 @@ use InvalidArgumentException;
 
 class ModuleLoaderTest extends \PHPUnit\Framework\TestCase
 {
+    public function testLoadingConfig()
+    {
+        $loader = new ModuleLoader([
+            Config::class,
+        ]);
+
+        $builder = new ContainerBuilder();
+        $di = $builder->newConfiguredInstance([$loader]);
+
+        $value = $di->newInstance(Value::class);
+
+        $this->assertEquals('required', $value->value);
+    }
+
     public function testModuleRequire()
     {
         $loader = new ModuleLoader([

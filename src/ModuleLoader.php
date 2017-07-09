@@ -94,10 +94,12 @@ class ModuleLoader implements ModuleLoaderInterface
 
             $this->touchedModules[$name]++;
 
-            $this->resolveRequire($idx, $module);
-            $this->resolveRequireEnv($idx, $module);
-            $this->resolveConflict($module, $name);
-            $this->resolveReplace($module, $name);
+            if ($module instanceof ModuleInterface) {
+                $this->resolveRequire($idx, $module);
+                $this->resolveRequireEnv($idx, $module);
+                $this->resolveConflict($module, $name);
+                $this->resolveReplace($module, $name);
+            }
 
             $module = $this->getModule($this->modules[$idx]);
             if (0 === strcmp($name, get_class($module))) {
@@ -129,13 +131,13 @@ class ModuleLoader implements ModuleLoaderInterface
         }
     }
 
-    protected function resolveRequire($idx, $module)
+    protected function resolveRequire($idx, ModuleInterface $module)
     {
         $requiredModules = $module->require();
         $this->injectRequiredModule($idx, $requiredModules);
     }
 
-    protected function resolveRequireEnv($idx, $module)
+    protected function resolveRequireEnv($idx, ModuleInterface $module)
     {
         $envMethod = 'require' . str_replace(' ', '', ucwords(
             strtolower(str_replace('_', ' ', trim($this->environment)))
@@ -146,7 +148,7 @@ class ModuleLoader implements ModuleLoaderInterface
         }
     }
 
-    protected function resolveConflict($module, $name)
+    protected function resolveConflict(ModuleInterface $module, $name)
     {
         $conflictingModules = $module->conflict();
         foreach ($conflictingModules as $conflictingModule) {
@@ -157,7 +159,7 @@ class ModuleLoader implements ModuleLoaderInterface
         }
     }
 
-    protected function resolveReplace($module, $name)
+    protected function resolveReplace(ModuleInterface $module, $name)
     {
         $replacesModules = $module->replace();
         foreach ($replacesModules as $replacesModule) {
@@ -185,9 +187,9 @@ class ModuleLoader implements ModuleLoaderInterface
             $module = new $module($this);
         }
 
-        if (! $module instanceof ModuleInterface) {
+        if (! $module instanceof ContainerConfigInterface) {
             throw new \InvalidArgumentException(
-                'Modules must implement ModuleInterface'
+                'Modules must implement ModuleInterface or ContainerConfigInterface'
             );
         }
 
