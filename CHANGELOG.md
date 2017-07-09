@@ -4,6 +4,10 @@ All notable changes to this package will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 0.5.3 - 2017-07-08
+### Changed
+-  Allowing anything implementing Aura\Di\ContainerConfigInterface to be loaded
+
 ## 0.5.2 - 2017-07-07
 ### Changed
 -  Required modules now get loaded before the module that depended on them
